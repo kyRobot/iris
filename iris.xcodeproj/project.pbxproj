@@ -10,6 +10,9 @@
 		095960821DA41C0600291FD8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960811DA41C0600291FD8 /* AppDelegate.swift */; };
 		095960841DA41C0600291FD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095960831DA41C0600291FD8 /* Assets.xcassets */; };
 		095960871DA41C0600291FD8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 095960851DA41C0600291FD8 /* MainMenu.xib */; };
+		095960911DA57B0400291FD8 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960901DA57B0400291FD8 /* ImageSource.swift */; };
+		095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960921DA57C9600291FD8 /* UnsplashSource.swift */; };
+		095960951DA5868D00291FD8 /* ImageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960941DA5868D00291FD8 /* ImageType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		095960861DA41C0600291FD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		095960881DA41C0600291FD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0959608E1DA5692100291FD8 /* iris.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iris.entitlements; sourceTree = "<group>"; };
+		095960901DA57B0400291FD8 /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
+		095960921DA57C9600291FD8 /* UnsplashSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsplashSource.swift; sourceTree = "<group>"; };
+		095960941DA5868D00291FD8 /* ImageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +57,7 @@
 		095960801DA41C0600291FD8 /* iris */ = {
 			isa = PBXGroup;
 			children = (
+				0959608F1DA57AAD00291FD8 /* Helpers */,
 				0959608E1DA5692100291FD8 /* iris.entitlements */,
 				095960811DA41C0600291FD8 /* AppDelegate.swift */,
 				095960831DA41C0600291FD8 /* Assets.xcassets */,
@@ -58,6 +65,17 @@
 				095960881DA41C0600291FD8 /* Info.plist */,
 			);
 			path = iris;
+			sourceTree = "<group>";
+		};
+		0959608F1DA57AAD00291FD8 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				095960901DA57B0400291FD8 /* ImageSource.swift */,
+				095960921DA57C9600291FD8 /* UnsplashSource.swift */,
+				095960941DA5868D00291FD8 /* ImageType.swift */,
+			);
+			name = Helpers;
+			path = helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +156,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				095960911DA57B0400291FD8 /* ImageSource.swift in Sources */,
+				095960951DA5868D00291FD8 /* ImageType.swift in Sources */,
+				095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */,
 				095960821DA41C0600291FD8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
