@@ -17,16 +17,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if let statusButton = statusItem.button {
             statusButton.image = #imageLiteral(resourceName: "menubar")
-            statusButton.action = #selector(AppDelegate.itemClicked)
         }
+        statusItem.menu = setupMenu()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
 
     }
 
-    func itemClicked(_ sender: AnyObject) {
+    func quit(sender: AnyObject) {
         NSApplication.shared().terminate(sender)
+    }
+
+    fileprivate func setupMenu() -> NSMenu {
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit iris", action: #selector(AppDelegate.quit), keyEquivalent: "q"))
+        return menu
     }
 
 
