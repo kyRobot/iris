@@ -18,6 +18,7 @@
 		095960831DA41C0600291FD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		095960861DA41C0600291FD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		095960881DA41C0600291FD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0959608E1DA5692100291FD8 /* iris.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iris.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +51,7 @@
 		095960801DA41C0600291FD8 /* iris */ = {
 			isa = PBXGroup;
 			children = (
+				0959608E1DA5692100291FD8 /* iris.entitlements */,
 				095960811DA41C0600291FD8 /* AppDelegate.swift */,
 				095960831DA41C0600291FD8 /* Assets.xcassets */,
 				095960851DA41C0600291FD8 /* MainMenu.xib */,
@@ -91,7 +93,13 @@
 					0959607D1DA41C0600291FD8 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = LET2F8G87E;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -242,6 +250,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iris/iris.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LET2F8G87E;
 				INFOPLIST_FILE = iris/Info.plist;
@@ -256,6 +266,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iris/iris.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LET2F8G87E;
 				INFOPLIST_FILE = iris/Info.plist;

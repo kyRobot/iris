@@ -11,16 +11,25 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var window: NSWindow!
+    let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        if let statusButton = statusItem.button {
+            statusButton.title = "iris"
+            statusButton.action = #selector(AppDelegate.itemClicked)
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+
     }
+
+    func itemClicked(_ sender: AnyObject) {
+        NSApplication.shared().terminate(sender)
+    }
+
+
 
 
 }
