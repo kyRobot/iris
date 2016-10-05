@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if let statusButton = statusItem.button {
-            statusButton.title = "iris"
+            statusButton.image = #imageLiteral(resourceName: "menubar")
             statusButton.action = #selector(AppDelegate.itemClicked)
         }
     }
