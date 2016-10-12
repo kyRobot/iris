@@ -26,6 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             statusButton.image = #imageLiteral(resourceName: "menubar")
         }
         statusItem.menu = setupMenu()
+
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -52,27 +53,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     fileprivate func asyncSetWallpaper(from url: URL) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let imageData = data, error == nil else { return }
-            let image = NSImage(data: imageData)
+//            showAsWindow(data: imageData)
 
-            // Jump onto main thread to update UI
-            DispatchQueue.main.async {
-                let imageView = NSImageView()
-                imageView.image = image
-                let viewController = NSViewController()
-                viewController.view = imageView
-
-                let controller = NSWindowController(window: self.tempWindow)
-                self.tempWindow.contentView = viewController.view
-                self.tempWindow.windowController = controller
-
-                controller.showWindow(self)
+            do {
+                let fileURL = URL(fileURLWithPath:NSTemporaryDirectory())
+                    .appendingPathComponent(NSUUID().uuidString)
+                try imageData.write(to: fileURL)
+                let workspace = NSWorkspace.shared()
+                NSScreen.screens().forEach { screen in
+                    try workspace.setDesktopImageURL(fileURL,
+                                                 for: screen,
+                                                 options: workspace.desktopImageOptions(for: screen)!)
+            } catch _ {
+                // pop a notification here?
+                print ("uh oh. find a nice way to report this")
             }
-        }.resume()
-        
+
     }
 
+    fileprivate func showAsWindow(data: NSData) {
+        let image = NSImage(data: imageData)
+        // Jump onto main thread to update UI
+        DispatchQueue.main.async {
+            let imageView = NSImageView()
+            imageView.image = image
+            let viewController = NSViewController()
+            viewController.view = imageView
 
+            let controller = NSWindowController(window: self.tempWindow)
+            self.tempWindow.contentView = viewController.view
+            self.tempWindow.windowController = controller
 
+            controller.showWindow(self)
+        }.resume()
+
+    }
 
 }
 
