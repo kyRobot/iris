@@ -12,8 +12,13 @@ enum ImageType {
     case urban, nature
 }
 
+enum UpdateFrequency {
+    case request, daily, weekly
+}
+
 struct Parameters {
-    var size: NSSize? = NSSize(width: 1440, height: 900)
+    var size: NSSize?
+    var frequency: UpdateFrequency?
 }
 
 

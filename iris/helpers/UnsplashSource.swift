@@ -14,27 +14,38 @@ class UnsplashSource: ImageSource {
     fileprivate let baseUrl = "https://source.unsplash.com"
     fileprivate let slash = "/"
 
-    func random(withOptions params: Parameters? = nil) -> URL? {
-        return buildUrl(endpoint: "random", options: params)
+    func random(withOptions params: Parameters?) -> URL? {
+        return buildUrl(endpoint: "random", options: standardOptions(options: params))
     }
 
-    func today(type: ImageType? = .urban) -> URL? {
+    func today(type: ImageType? = .urban, withOptions params: Parameters?) -> URL? {
+        var options = standardOptions(options: params)
+        options.frequency = UpdateFrequency.daily
+        let category = "category/"
         switch type! {
         case .urban:
-            return buildUrl(endpoint: "buildings", options: nil)
+            return buildUrl(endpoint: category+"buildings", options: options)
         case .nature:
-            return buildUrl(endpoint: "nature", options: nil)
+            return buildUrl(endpoint: category+"nature", options: options)
         }
     }
 
-    fileprivate func buildUrl(endpoint: String, options: Parameters?) -> URL? {
+    fileprivate func buildUrl(endpoint: String, options: Parameters) -> URL? {
+        // ordering is important
         var segments = [baseUrl, endpoint]
 
-        if let size = options?.size {
-            segments.append("\(Int(size.width))x\(Int(size.height))")
-        }
+
+        segments.append("\(Int(options.size!.width))x\(Int(options.size!.height))")
+
 
         return URL(string: segments.joined(separator: slash))
+    }
+
+    fileprivate func standardOptions(options: Parameters?) -> Parameters {
+        var base = Parameters()
+        base.size = options?.size ?? NSSize(width: 1499, height: 900)
+        base.frequency = options?.frequency ?? UpdateFrequency.request
+        return base
     }
     
 }

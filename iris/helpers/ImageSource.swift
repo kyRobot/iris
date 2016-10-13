@@ -13,5 +13,5 @@ protocol ImageSource {
 
     func random(withOptions: Parameters?) -> URL?
 
-    func today(type: ImageType?) -> URL?
+    func today(type: ImageType?, withOptions: Parameters?) -> URL?
 }
