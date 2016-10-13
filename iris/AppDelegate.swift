@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     let source: ImageSource = UnsplashSource()
-    var largestKnownScreen: NSSize?
+    var commonOptions = Parameters()
 
     let tempWindow: NSWindow = NSWindow(contentRect: NSMakeRect(100, 100, 1080, 720),
                                         styleMask: [NSWindowStyleMask.titled,
@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                         backing: NSBackingStoreType.buffered, defer: true)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        largestKnownScreen = largestScreenSize()
+        commonOptions.size = largestScreenSize()
 
         if let statusButton = statusItem.button {
             statusButton.image = #imageLiteral(resourceName: "menubar")
@@ -42,19 +42,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     fileprivate func setupMenu() -> NSMenu {
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Random", action: #selector(AppDelegate.randomImage), keyEquivalent: ""))
+
+        menu.addItem(NSMenuItem(title: "Random",
+                                action: #selector(self.randomImage),
+                                keyEquivalent: ""))
+
+        menu.addItem(NSMenuItem(title: "Nature",
+                                action: #selector(self.natureImage),
+                                keyEquivalent: ""))
+
+        menu.addItem(NSMenuItem(title: "Urban",
+                                action: #selector(self.urbanImage),
+                                keyEquivalent: ""))
+
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit iris", action: #selector(AppDelegate.quit), keyEquivalent: "q"))
         return menu
     }
 
-    func randomImage() {
-        var imageOptions = Parameters()
-        imageOptions.size = largestKnownScreen
-        guard let supported = source.random(withOptions: imageOptions) else { return }
-        asyncSetWallpaper(from: supported)
+//    MARK: Menu Action functions
+    @objc fileprivate func randomImage() {
+        guard let url = source.random(withOptions: commonOptions) else { return }
+        asyncSetWallpaper(from: url)
     }
 
+    fileprivate func categoryImage(category: ImageType) {
+        guard let url = source.today(type: category, withOptions: commonOptions) else { return }
+        asyncSetWallpaper(from: url)
+    }
+
+    @objc fileprivate func natureImage() {
+        categoryImage(category: ImageType.nature)
+    }
+
+    @objc fileprivate func urbanImage() {
+        categoryImage(category: ImageType.urban)
+    }
+
+//    MARK: Wallpaper changes
     fileprivate func asyncSetWallpaper(from url: URL) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let imageData = data, error == nil else { return }
