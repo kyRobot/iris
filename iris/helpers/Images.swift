@@ -9,5 +9,11 @@
 import Foundation
 
 enum ImageType {
-    case Urban, Nature
+    case urban, nature
 }
+
+struct Parameters {
+    var size: NSSize? = NSSize(width: 1440, height: 900)
+}
+
+

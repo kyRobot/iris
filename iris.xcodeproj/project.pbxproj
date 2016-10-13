@@ -12,7 +12,7 @@
 		095960871DA41C0600291FD8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 095960851DA41C0600291FD8 /* MainMenu.xib */; };
 		095960911DA57B0400291FD8 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960901DA57B0400291FD8 /* ImageSource.swift */; };
 		095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960921DA57C9600291FD8 /* UnsplashSource.swift */; };
-		095960951DA5868D00291FD8 /* ImageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960941DA5868D00291FD8 /* ImageType.swift */; };
+		095960951DA5868D00291FD8 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960941DA5868D00291FD8 /* Images.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +24,7 @@
 		0959608E1DA5692100291FD8 /* iris.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iris.entitlements; sourceTree = "<group>"; };
 		095960901DA57B0400291FD8 /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		095960921DA57C9600291FD8 /* UnsplashSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsplashSource.swift; sourceTree = "<group>"; };
-		095960941DA5868D00291FD8 /* ImageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageType.swift; sourceTree = "<group>"; };
+		095960941DA5868D00291FD8 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 			children = (
 				095960901DA57B0400291FD8 /* ImageSource.swift */,
 				095960921DA57C9600291FD8 /* UnsplashSource.swift */,
-				095960941DA5868D00291FD8 /* ImageType.swift */,
+				095960941DA5868D00291FD8 /* Images.swift */,
 			);
 			name = Helpers;
 			path = helpers;
@@ -157,7 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				095960911DA57B0400291FD8 /* ImageSource.swift in Sources */,
-				095960951DA5868D00291FD8 /* ImageType.swift in Sources */,
+				095960951DA5868D00291FD8 /* Images.swift in Sources */,
 				095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */,
 				095960821DA41C0600291FD8 /* AppDelegate.swift in Sources */,
 			);
@@ -318,6 +318,7 @@
 				0959608D1DA41C0600291FD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

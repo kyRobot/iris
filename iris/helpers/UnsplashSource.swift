@@ -14,21 +14,27 @@ class UnsplashSource: ImageSource {
     fileprivate let baseUrl = "https://source.unsplash.com"
     fileprivate let slash = "/"
 
-    func random() -> URL? {
-        return buildUrl(segment: "random")
+    func random(withOptions params: Parameters? = nil) -> URL? {
+        return buildUrl(endpoint: "random", options: params)
     }
 
-    func today(type: ImageType? = .Urban) -> URL? {
+    func today(type: ImageType? = .urban) -> URL? {
         switch type! {
-        case .Urban:
-            return buildUrl(segment: "buildings")
-        case .Nature:
-            return buildUrl(segment: "nature")
+        case .urban:
+            return buildUrl(endpoint: "buildings", options: nil)
+        case .nature:
+            return buildUrl(endpoint: "nature", options: nil)
         }
     }
 
-    fileprivate func buildUrl(segment: String) -> URL? {
-        return URL(string:[baseUrl, segment].joined(separator: slash))
+    fileprivate func buildUrl(endpoint: String, options: Parameters?) -> URL? {
+        var segments = [baseUrl, endpoint]
+
+        if let size = options?.size {
+            segments.append("\(Int(size.width))x\(Int(size.height))")
+        }
+
+        return URL(string: segments.joined(separator: slash))
     }
     
 }

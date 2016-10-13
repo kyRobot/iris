@@ -11,7 +11,7 @@ import Cocoa
 
 protocol ImageSource {
 
-    func random() -> URL?
+    func random(withOptions: Parameters?) -> URL?
 
     func today(type: ImageType?) -> URL?
 }
