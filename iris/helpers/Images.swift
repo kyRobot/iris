@@ -9,7 +9,7 @@
 import Foundation
 
 enum ImageType {
-    case urban, nature
+    case urban, nature, random
 }
 
 enum UpdateFrequency {

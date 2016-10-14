@@ -12,8 +12,11 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+    let menu = NSMenu()
     let source: ImageSource = UnsplashSource()
     var commonOptions = Parameters()
+
+    var selectedCategory: Int = -999
 
     let tempWindow: NSWindow = NSWindow(contentRect: NSMakeRect(100, 100, 1080, 720),
                                         styleMask: [NSWindowStyleMask.titled,
@@ -28,8 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let statusButton = statusItem.button {
             statusButton.image = #imageLiteral(resourceName: "menubar")
         }
-        statusItem.menu = setupMenu()
-
+        setupMenu()
+        statusItem.menu = menu
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -40,43 +43,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared().terminate(sender)
     }
 
-    fileprivate func setupMenu() -> NSMenu {
-        let menu = NSMenu()
-
-        menu.addItem(NSMenuItem(title: "Random",
-                                action: #selector(self.randomImage),
-                                keyEquivalent: ""))
-
-        menu.addItem(NSMenuItem(title: "Nature",
-                                action: #selector(self.natureImage),
-                                keyEquivalent: ""))
-
-        menu.addItem(NSMenuItem(title: "Urban",
-                                action: #selector(self.urbanImage),
-                                keyEquivalent: ""))
-
+    fileprivate func setupMenu() {
+        menu.addItem(headerMenuItem(title: "Theme"))
+        menu.addItem(themeChoiceMenuItem(title: "Random", tag: .random))
+        menu.addItem(themeChoiceMenuItem(title: "Nature", tag: .nature))
+        menu.addItem(themeChoiceMenuItem(title: "Urban", tag: .urban))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit iris", action: #selector(AppDelegate.quit), keyEquivalent: "q"))
-        return menu
+    }
+
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if (menuItem.action == #selector(self.categoryChoice(sender:))) {
+            menuItem.state = (menuItem.tag == selectedCategory ? NSOnState : NSOffState)
+        }
+        return true
+    }
+
+    fileprivate func headerMenuItem(title: String) -> NSMenuItem {
+        return NSMenuItem(title: title, action: nil, keyEquivalent: "")
+    }
+
+    fileprivate func themeChoiceMenuItem(title: String, tag: ImageType) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: #selector(self.categoryChoice(sender:)), keyEquivalent: "")
+        item.tag = tag.hashValue
+        return item
+    }
+
+    @objc fileprivate func categoryChoice(sender: NSMenuItem) {
+        selectedCategory = sender.tag
+        switch sender.tag {
+        case ImageType.nature.hashValue:
+            updateImage(theme: .nature)
+        case ImageType.urban.hashValue:
+            updateImage(theme: .urban)
+        case ImageType.random.hashValue:
+            updateImage(theme: .random)
+        default: break
+        }
     }
 
 //    MARK: Menu Action functions
-    @objc fileprivate func randomImage() {
-        guard let url = source.random(withOptions: commonOptions) else { return }
+    fileprivate func updateImage(theme: ImageType) {
+        guard let url = source.get(type: theme, withOptions: commonOptions) else { return }
         asyncSetWallpaper(from: url)
-    }
-
-    fileprivate func categoryImage(category: ImageType) {
-        guard let url = source.today(type: category, withOptions: commonOptions) else { return }
-        asyncSetWallpaper(from: url)
-    }
-
-    @objc fileprivate func natureImage() {
-        categoryImage(category: ImageType.nature)
-    }
-
-    @objc fileprivate func urbanImage() {
-        categoryImage(category: ImageType.urban)
     }
 
 //    MARK: Wallpaper changes

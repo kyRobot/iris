@@ -11,7 +11,9 @@ import Cocoa
 
 protocol ImageSource {
 
+    // Should return a random image, with optional parameter overrides
     func random(withOptions: Parameters?) -> URL?
 
-    func today(type: ImageType?, withOptions: Parameters?) -> URL?
+    // Should return an Image with the given ImageType, with optional parameter overrides
+    func get(type: ImageType?, withOptions: Parameters?) -> URL?
 }

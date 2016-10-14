@@ -15,11 +15,11 @@ class UnsplashSource: ImageSource {
     fileprivate let slash = "/"
 
     func random(withOptions params: Parameters?) -> URL? {
-        return buildUrl(endpoint: "random", options: standardOptions(options: params))
+        return buildUrl(endpoint: "random", options: standardOptions(overrides: params))
     }
 
-    func today(type: ImageType? = .urban, withOptions params: Parameters?) -> URL? {
-        var options = standardOptions(options: params)
+    func get(type: ImageType? = .random, withOptions params: Parameters?) -> URL? {
+        var options = standardOptions(overrides: params)
         options.frequency = UpdateFrequency.daily
         let category = "category/"
         switch type! {
@@ -27,6 +27,8 @@ class UnsplashSource: ImageSource {
             return buildUrl(endpoint: category+"buildings", options: options)
         case .nature:
             return buildUrl(endpoint: category+"nature", options: options)
+        case .random:
+            return random(withOptions: options)
         }
     }
 
@@ -41,10 +43,10 @@ class UnsplashSource: ImageSource {
         return URL(string: segments.joined(separator: slash))
     }
 
-    fileprivate func standardOptions(options: Parameters?) -> Parameters {
+    fileprivate func standardOptions(overrides: Parameters?) -> Parameters {
         var base = Parameters()
-        base.size = options?.size ?? NSSize(width: 1499, height: 900)
-        base.frequency = options?.frequency ?? UpdateFrequency.request
+        base.size = overrides?.size ?? NSSize(width: 1499, height: 900)
+        base.frequency = overrides?.frequency ?? UpdateFrequency.request
         return base
     }
     
