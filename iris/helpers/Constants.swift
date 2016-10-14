@@ -8,8 +8,17 @@
 
 import Foundation
 
-enum ImageType {
-    case urban, nature, random
+enum ImageType: Int {
+    case random, urban, nature
+}
+
+struct UIConstants {
+    static let Themes = "Theme"
+    static let Random = "Random"
+    static let Urban = "Urban"
+    static let Nature = "Nature"
+
+    static let Quit = "Quit Iris"
 }
 
 enum UpdateFrequency {

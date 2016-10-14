@@ -36,17 +36,13 @@ class StatusItemController: NSObject, NSMenuDelegate {
         statusItem.menu = menu
     }
 
-    @objc fileprivate func quit(sender: AnyObject) {
-        NSApplication.shared().terminate(sender)
-    }
-
     fileprivate func setupMenu() {
-        menu.addItem(headerMenuItem(title: "Theme"))
-        menu.addItem(themeChoiceMenuItem(title: "Random", tag: .random))
-        menu.addItem(themeChoiceMenuItem(title: "Nature", tag: .nature))
-        menu.addItem(themeChoiceMenuItem(title: "Urban", tag: .urban))
+        menu.addItem(headerMenuItem(title: UIConstants.Themes))
+        menu.addItem(themeChoiceMenuItem(title: UIConstants.Random, tag: .random))
+        menu.addItem(themeChoiceMenuItem(title: UIConstants.Nature, tag: .nature))
+        menu.addItem(themeChoiceMenuItem(title: UIConstants.Urban, tag: .urban))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit iris", action: #selector(self.quit), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: UIConstants.Quit, action: #selector(self.quit), keyEquivalent: "q"))
         menu.items.forEach({(item) in item.target = self})
     }
 
@@ -63,24 +59,30 @@ class StatusItemController: NSObject, NSMenuDelegate {
 
     fileprivate func themeChoiceMenuItem(title: String, tag: ImageType) -> NSMenuItem {
         let item = NSMenuItem(title: title, action: #selector(self.categoryChoice(sender:)), keyEquivalent: "")
-        item.tag = tag.hashValue
+        item.tag = tag.rawValue
         return item
     }
 
+    //    MARK: Menu Action functions
+    @objc fileprivate func quit(sender: AnyObject) {
+        NSApplication.shared().terminate(sender)
+    }
+
     @objc fileprivate func categoryChoice(sender: NSMenuItem) {
+
+        guard let knownType = ImageType(rawValue: sender.tag) else { return }
+
         selectedCategory = sender.tag
-        switch sender.tag {
-        case ImageType.nature.hashValue:
+        switch (knownType) {
+        case .nature:
             updateImage(theme: .nature)
-        case ImageType.urban.hashValue:
+        case .urban:
             updateImage(theme: .urban)
-        case ImageType.random.hashValue:
+        case .random:
             updateImage(theme: .random)
-        default: break
         }
     }
 
-    //    MARK: Menu Action functions
     fileprivate func updateImage(theme: ImageType) {
         guard let url = source.get(type: theme, withOptions: commonOptions) else { return }
         asyncSetWallpaper(from: url)
