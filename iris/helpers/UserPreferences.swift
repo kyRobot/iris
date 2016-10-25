@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct UserPreferences {
-    fileprivate let defaults = UserDefaults.standard
+struct Preferences {
+    fileprivate static let defaults = UserDefaults.standard
 
     fileprivate struct Keys {
         static let currentTheme = "CURRENT_THEME"
@@ -21,7 +21,7 @@ struct UserPreferences {
 
     static var theme: ImageType {
         get {
-            return ImageType(rawValue: UserDefaults.standard.integer(forKey: Keys.currentTheme)) ?? .random
+            return ImageType(rawValue: defaults.integer(forKey: Keys.currentTheme)) ?? .random
         }
 
         set {

@@ -29,5 +29,3 @@ struct Parameters {
     var size: NSSize?
     var frequency: UpdateFrequency?
 }
-
-

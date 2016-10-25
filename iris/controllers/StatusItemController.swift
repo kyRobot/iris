@@ -16,7 +16,7 @@ class StatusItemController: NSObject, NSMenuDelegate {
     let source: ImageSource = UnsplashSource()
     var commonOptions = Parameters()
 
-    let tempWindow: NSWindow = NSWindow(contentRect: NSMakeRect(100, 100, 1080, 720),
+    let tempWindow: NSWindow = NSWindow(contentRect: NSRect(x: 10, y:10, width: 10, height: 720),
                                         styleMask: [NSWindowStyleMask.titled,
                                                     NSWindowStyleMask.closable,
                                                     NSWindowStyleMask.resizable,
@@ -32,7 +32,7 @@ class StatusItemController: NSObject, NSMenuDelegate {
         }
         setupMenu()
         statusItem.menu = menu
-        updateImage(theme: UserPreferences.theme)
+        updateImage(theme: Preferences.theme)
     }
 
     fileprivate func setupMenu() {
@@ -41,13 +41,16 @@ class StatusItemController: NSObject, NSMenuDelegate {
         menu.addItem(themeChoiceMenuItem(title: UIConstants.Nature, tag: .nature))
         menu.addItem(themeChoiceMenuItem(title: UIConstants.Urban, tag: .urban))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: UIConstants.Quit, action: #selector(self.quit), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: UIConstants.Quit,
+                                action: #selector(self.quit),
+                                keyEquivalent: "q"))
         menu.items.forEach({(item) in item.target = self})
     }
 
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        if (menuItem.action == #selector(self.categoryChoice(sender:))) {
-            menuItem.state = (ImageType(rawValue:menuItem.tag) == UserPreferences.theme ? NSOnState : NSOffState)
+        if menuItem.action == #selector(self.categoryChoice(sender:)) {
+            let selected = ImageType(rawValue:menuItem.tag) == Preferences.theme
+            menuItem.state = selected ? NSOnState : NSOffState
         }
         return true
     }
@@ -57,7 +60,9 @@ class StatusItemController: NSObject, NSMenuDelegate {
     }
 
     fileprivate func themeChoiceMenuItem(title: String, tag: ImageType) -> NSMenuItem {
-        let item = NSMenuItem(title: title, action: #selector(self.categoryChoice(sender:)), keyEquivalent: "")
+        let item = NSMenuItem(title: title,
+                              action: #selector(self.categoryChoice(sender:)),
+                              keyEquivalent: "")
         item.tag = tag.rawValue
         return item
     }
@@ -69,7 +74,7 @@ class StatusItemController: NSObject, NSMenuDelegate {
 
     @objc fileprivate func categoryChoice(sender: NSMenuItem) {
         guard let knownType = ImageType(rawValue: sender.tag) else { return }
-        UserPreferences.theme = knownType
+        Preferences.theme = knownType
         updateImage(theme: knownType)
     }
 
@@ -95,8 +100,8 @@ class StatusItemController: NSObject, NSMenuDelegate {
             let workspace = NSWorkspace.shared()
             try NSScreen.screens()?.forEach { screen in
                 try workspace.setDesktopImageURL(fileURL,
-                                                 for: screen,
-                                                 options: workspace.desktopImageOptions(for: screen)!)
+                                            for: screen,
+                                            options: workspace.desktopImageOptions(for: screen)!)
             }
         } catch _ {
             // maybe pop a notification here?
@@ -122,10 +127,10 @@ class StatusItemController: NSObject, NSMenuDelegate {
     }
 
     fileprivate func largestScreenSize() -> NSSize? {
-        let compare: (NSScreen, NSScreen) throws -> Bool = { (a, b) in
-            return a.frame.height > b.frame.height
+        let compare: (NSScreen, NSScreen) -> Bool = { (this, that) in
+            return this.frame.height > that.frame.height
         }
-        return try! NSScreen.screens()?.max(by: compare)?.frame.size
+        return NSScreen.screens()?.max(by: compare)?.frame.size
     }
 
 

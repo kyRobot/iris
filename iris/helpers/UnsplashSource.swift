@@ -49,5 +49,5 @@ class UnsplashSource: ImageSource {
         base.frequency = overrides?.frequency ?? UpdateFrequency.request
         return base
     }
-    
+
 }
