@@ -15,12 +15,7 @@ final class WallpaperController {
     var requestOptions = Parameters()
     let prefs = Preferences()
     var timer: Timer?
-    let window: NSWindow = NSWindow(contentRect: NSRect(x: 10, y:10, width: 1280, height: 720),
-                                        styleMask: [NSWindowStyleMask.titled,
-                                                    NSWindowStyleMask.closable,
-                                                    NSWindowStyleMask.resizable,
-                                                    NSWindowStyleMask.miniaturizable],
-                                        backing: NSBackingStoreType.buffered, defer: true)
+
 
     private struct Interval {
         static let hour = 1.0 * 60.0 * 60.0
@@ -89,45 +84,30 @@ final class WallpaperController {
     //    MARK: Wallpaper changes
     fileprivate func asyncSetWallpaper(from url: URL) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let imageData = data, error == nil else { return }
-            self.showAsWindow(data: imageData)
-            //            self.setAsWallpaper(data: imageData)
+            do {
+                guard let imageData = data, error == nil else { return }
+                let fileURL = URL(fileURLWithPath:NSTemporaryDirectory())
+                    .appendingPathComponent(UUID().uuidString)
+                try imageData.write(to: fileURL)
+                let workspace = NSWorkspace.shared()
+
+                try NSScreen.screens()?.forEach { screen in
+                    let options = workspace.desktopImageOptions(for: screen)
+                    try workspace.setDesktopImageURL(fileURL,
+                                                     for: screen,
+                                                     options: options!)
+                }
+            } catch _ {
+                // maybe pop a notification here?
+                print ("uh oh. find a nice way to report this")
+            }
             }.resume()
     }
 
     fileprivate func setAsWallpaper(data: Data) {
-        do {
-            let fileURL = URL(fileURLWithPath:NSTemporaryDirectory())
-                .appendingPathComponent(UUID().uuidString)
-            try data.write(to: fileURL)
-            let workspace = NSWorkspace.shared()
-            try NSScreen.screens()?.forEach { screen in
-                try workspace.setDesktopImageURL(fileURL,
-                                            for: screen,
-                                            options: workspace.desktopImageOptions(for: screen)!)
-            }
-        } catch _ {
-            // maybe pop a notification here?
-            print ("uh oh. find a nice way to report this")
-        }
+
     }
 
-    fileprivate func showAsWindow(data: Data) {
-        let image = NSImage(data: data)
-        // Jump onto main thread to update UI
-        DispatchQueue.main.async {
-            let imageView = NSImageView()
-            imageView.image = image
-            let viewController = NSViewController()
-            viewController.view = imageView
-
-            let controller = NSWindowController(window: self.window)
-            self.window.contentView = viewController.view
-            self.window.windowController = controller
-
-            controller.showWindow(self)
-        }
-    }
 
 
 }
