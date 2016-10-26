@@ -15,12 +15,14 @@ final class UnsplashSource: ImageSource {
     fileprivate let slash = "/"
 
     func random(withOptions params: Parameters?) -> URL? {
-        return buildUrl(endpoint: "random", options: standardOptions(overrides: params))
+        return get(type: ImageType.random, withOptions: params)
     }
 
     func get(type: ImageType? = .random, withOptions params: Parameters?) -> URL? {
-        var options = standardOptions(overrides: params)
-        options.frequency = UpdateFrequency.daily
+        let options = standardOptions(overrides: params)
+        if options.frequency == .never {
+            return nil
+        }
         let category = "category/"
         switch type! {
         case .urban:
@@ -36,8 +38,13 @@ final class UnsplashSource: ImageSource {
         // ordering is important
         var segments = [baseUrl, endpoint]
 
-
         segments.append("\(Int(options.size!.width))x\(Int(options.size!.height))")
+
+        if let frequency = options.frequency {
+            if frequency == .daily || frequency == .weekly {
+                segments.append(frequency.rawValue)
+            }
+        }
 
 
         return URL(string: segments.joined(separator: slash))

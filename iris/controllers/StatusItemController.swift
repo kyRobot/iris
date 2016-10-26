@@ -38,6 +38,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         submenu.addItem(frequencyMenuItem(title: UIConstants.daily, representing: .daily))
         submenu.addItem(frequencyMenuItem(title: UIConstants.weekly, representing: .weekly))
         submenu.addItem(frequencyMenuItem(title: UIConstants.themely, representing: .request))
+        submenu.addItem(frequencyMenuItem(title: UIConstants.never, representing: .never))
         menu.addItem(frequency)
         menu.setSubmenu(submenu, for: frequency)
         menu.addItem(NSMenuItem.separator())
@@ -100,6 +101,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     @objc fileprivate func frequencyChoice(sender: NSMenuItem) {
         guard let frequency = sender.representedObject as? UpdateFrequency else { return }
         preferences.frequency = frequency
+
     }
 
 }

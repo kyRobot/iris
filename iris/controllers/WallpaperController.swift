@@ -25,6 +25,11 @@ final class WallpaperController {
         requestOptions.size = largestScreenSize()
     }
 
+    fileprivate func refreshOptions() {
+        requestOptions.frequency = Preferences().frequency
+        requestOptions.size = largestScreenSize()
+    }
+
     fileprivate func largestScreenSize() -> NSSize? {
         let compare: (NSScreen, NSScreen) -> Bool = { (this, that) in
             return this.frame.height > that.frame.height
@@ -33,6 +38,7 @@ final class WallpaperController {
     }
 
     func update(theme: ImageType) {
+        refreshOptions()
         guard let url = source.get(type: theme, withOptions: requestOptions) else { return }
         asyncSetWallpaper(from: url)
     }
