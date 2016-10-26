@@ -20,6 +20,8 @@ struct UIConstants {
 
     static let update = "Update"
     static let daily = "Daily"
+    static let weekly = "Weekly"
+    static let themely = "With theme"
     static let quit = "Quit Iris"
 }
 

@@ -33,13 +33,21 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         menu.addItem(categoryMenuItem(title: UIConstants.nature, representing: .nature))
         menu.addItem(categoryMenuItem(title: UIConstants.urban, representing: .urban))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(headerMenuItem(title: UIConstants.update))
-        menu.addItem(frequencyMenuItem(title: UIConstants.daily, representing: .daily))
+        let frequency: NSMenuItem = headerMenuItem(title: UIConstants.update)
+        let submenu = NSMenu()
+        submenu.addItem(frequencyMenuItem(title: UIConstants.daily, representing: .daily))
+        submenu.addItem(frequencyMenuItem(title: UIConstants.weekly, representing: .weekly))
+        submenu.addItem(frequencyMenuItem(title: UIConstants.themely, representing: .request))
+        menu.addItem(frequency)
+        menu.setSubmenu(submenu, for: frequency)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: UIConstants.quit,
                                 action: #selector(self.quit),
                                 keyEquivalent: "q"))
-        menu.items.forEach({(item) in item.target = self})
+
+        for item in menu.items + submenu.items {
+            item.target = self
+        }
     }
 
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
