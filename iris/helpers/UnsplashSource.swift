@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 
-class UnsplashSource: ImageSource {
+final class UnsplashSource: ImageSource {
 
     fileprivate let baseUrl = "https://source.unsplash.com"
     fileprivate let slash = "/"

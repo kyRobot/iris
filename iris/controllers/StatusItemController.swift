@@ -9,14 +9,12 @@
 import Foundation
 import Cocoa
 
-class StatusItemController: NSObject, NSMenuDelegate {
+final class StatusItemController: NSObject, NSMenuDelegate {
 
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     let menu = NSMenu()
     let wallpaper = WallpaperController()
     var preferences = Preferences()
-
-
 
     override init() {
         super.init()

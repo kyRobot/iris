@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 
-class WallpaperController {
+final class WallpaperController {
 
     let source: ImageSource = UnsplashSource()
     var requestOptions = Parameters()
