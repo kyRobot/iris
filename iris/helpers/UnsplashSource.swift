@@ -27,7 +27,7 @@ final class UnsplashSource: ImageSource {
         case .nature:
             return buildUrl(endpoint: category+"nature", options: options)
         case .random:
-            return random(withOptions: options)
+            return buildUrl(endpoint: "random", options: options)
         }
     }
 
