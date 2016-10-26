@@ -11,12 +11,14 @@ import Cocoa
 
 class StatusItemController: NSObject, NSMenuDelegate {
 
+    var preferences = Preferences()
+
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     let menu = NSMenu()
     let source: ImageSource = UnsplashSource()
     var commonOptions = Parameters()
 
-    let tempWindow: NSWindow = NSWindow(contentRect: NSRect(x: 10, y:10, width: 10, height: 720),
+    let tempWindow: NSWindow = NSWindow(contentRect: NSRect(x: 10, y:10, width: 1280, height: 720),
                                         styleMask: [NSWindowStyleMask.titled,
                                                     NSWindowStyleMask.closable,
                                                     NSWindowStyleMask.resizable,
@@ -32,26 +34,37 @@ class StatusItemController: NSObject, NSMenuDelegate {
         }
         setupMenu()
         statusItem.menu = menu
-        updateImage(theme: Preferences.theme)
+        updateImage(theme: preferences.theme)
     }
 
     fileprivate func setupMenu() {
-        menu.addItem(headerMenuItem(title: UIConstants.Themes))
-        menu.addItem(themeChoiceMenuItem(title: UIConstants.Random, tag: .random))
-        menu.addItem(themeChoiceMenuItem(title: UIConstants.Nature, tag: .nature))
-        menu.addItem(themeChoiceMenuItem(title: UIConstants.Urban, tag: .urban))
+        menu.addItem(headerMenuItem(title: UIConstants.themes))
+        menu.addItem(categoryMenuItem(title: UIConstants.random, representing: .random))
+        menu.addItem(categoryMenuItem(title: UIConstants.nature, representing: .nature))
+        menu.addItem(categoryMenuItem(title: UIConstants.urban, representing: .urban))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: UIConstants.Quit,
+        menu.addItem(headerMenuItem(title: UIConstants.update))
+        menu.addItem(frequencyMenuItem(title: UIConstants.daily, representing: .daily))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: UIConstants.quit,
                                 action: #selector(self.quit),
                                 keyEquivalent: "q"))
         menu.items.forEach({(item) in item.target = self})
     }
 
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        if menuItem.action == #selector(self.categoryChoice(sender:)) {
-            let selected = ImageType(rawValue:menuItem.tag) == Preferences.theme
-            menuItem.state = selected ? NSOnState : NSOffState
+        let selected: Bool
+        let represented = menuItem.representedObject
+
+        switch menuItem.action {
+        case #selector(categoryChoice(sender:))? :
+            selected = represented as? ImageType == preferences.theme
+        case #selector(self.frequencyChoice(sender:))? :
+            selected = represented as? UpdateFrequency == preferences.frequency
+        default:
+            selected = false
         }
+        menuItem.state = selected ? NSOnState : NSOffState
         return true
     }
 
@@ -59,11 +72,19 @@ class StatusItemController: NSObject, NSMenuDelegate {
         return NSMenuItem(title: title, action: nil, keyEquivalent: "")
     }
 
-    fileprivate func themeChoiceMenuItem(title: String, tag: ImageType) -> NSMenuItem {
+    fileprivate func categoryMenuItem(title: String, representing: ImageType) -> NSMenuItem {
         let item = NSMenuItem(title: title,
                               action: #selector(self.categoryChoice(sender:)),
                               keyEquivalent: "")
-        item.tag = tag.rawValue
+        item.representedObject = representing
+        return item
+    }
+
+    fileprivate func frequencyMenuItem(title: String, representing: UpdateFrequency) -> NSMenuItem {
+        let item = NSMenuItem(title: title,
+                              action: #selector(self.frequencyChoice(sender:)),
+                              keyEquivalent: "")
+        item.representedObject = representing
         return item
     }
 
@@ -73,9 +94,14 @@ class StatusItemController: NSObject, NSMenuDelegate {
     }
 
     @objc fileprivate func categoryChoice(sender: NSMenuItem) {
-        guard let knownType = ImageType(rawValue: sender.tag) else { return }
-        Preferences.theme = knownType
-        updateImage(theme: knownType)
+        guard let theme = sender.representedObject as? ImageType else { return }
+        preferences.theme = theme
+        updateImage(theme: theme)
+    }
+
+    @objc fileprivate func frequencyChoice(sender: NSMenuItem) {
+        guard let frequency = sender.representedObject as? UpdateFrequency else { return }
+        preferences.frequency = frequency
     }
 
     fileprivate func updateImage(theme: ImageType) {

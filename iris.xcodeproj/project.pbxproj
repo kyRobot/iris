@@ -14,7 +14,7 @@
 		095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960921DA57C9600291FD8 /* UnsplashSource.swift */; };
 		095960951DA5868D00291FD8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960941DA5868D00291FD8 /* Constants.swift */; };
 		098FF4C31DB13B3B00D5872E /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098FF4C21DB13B3B00D5872E /* StatusItemController.swift */; };
-		098FF4C51DB178A800D5872E /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098FF4C41DB178A800D5872E /* UserPreferences.swift */; };
+		098FF4C51DB178A800D5872E /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098FF4C41DB178A800D5872E /* Preferences.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +28,7 @@
 		095960921DA57C9600291FD8 /* UnsplashSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsplashSource.swift; sourceTree = "<group>"; };
 		095960941DA5868D00291FD8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		098FF4C21DB13B3B00D5872E /* StatusItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
-		098FF4C41DB178A800D5872E /* UserPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		098FF4C41DB178A800D5872E /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +78,7 @@
 				095960901DA57B0400291FD8 /* ImageSource.swift */,
 				095960921DA57C9600291FD8 /* UnsplashSource.swift */,
 				095960941DA5868D00291FD8 /* Constants.swift */,
-				098FF4C41DB178A800D5872E /* UserPreferences.swift */,
+				098FF4C41DB178A800D5872E /* Preferences.swift */,
 			);
 			name = Helpers;
 			path = helpers;
@@ -189,7 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				095960911DA57B0400291FD8 /* ImageSource.swift in Sources */,
-				098FF4C51DB178A800D5872E /* UserPreferences.swift in Sources */,
+				098FF4C51DB178A800D5872E /* Preferences.swift in Sources */,
 				095960951DA5868D00291FD8 /* Constants.swift in Sources */,
 				098FF4C31DB13B3B00D5872E /* StatusItemController.swift in Sources */,
 				095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */,
