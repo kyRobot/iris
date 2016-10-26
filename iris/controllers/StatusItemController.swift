@@ -37,8 +37,8 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         let submenu = NSMenu()
         submenu.addItem(frequencyMenuItem(title: UIConstants.daily, representing: .daily))
         submenu.addItem(frequencyMenuItem(title: UIConstants.weekly, representing: .weekly))
-        submenu.addItem(frequencyMenuItem(title: UIConstants.themely, representing: .request))
-        submenu.addItem(frequencyMenuItem(title: UIConstants.never, representing: .never))
+        submenu.addItem(frequencyMenuItem(title: UIConstants.hourly, representing: .hourly))
+        submenu.addItem(frequencyMenuItem(title: UIConstants.manual, representing: .request))
         menu.addItem(frequency)
         menu.setSubmenu(submenu, for: frequency)
         menu.addItem(NSMenuItem.separator())
@@ -58,7 +58,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         switch menuItem.action {
         case #selector(categoryChoice(sender:))? :
             selected = represented as? ImageType == preferences.theme
-        case #selector(self.frequencyChoice(sender:))? :
+        case #selector(frequencyChoice(sender:))? :
             selected = represented as? UpdateFrequency == preferences.frequency
         default:
             selected = false
@@ -73,7 +73,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
 
     fileprivate func categoryMenuItem(title: String, representing: ImageType) -> NSMenuItem {
         let item = NSMenuItem(title: title,
-                              action: #selector(self.categoryChoice(sender:)),
+                              action: #selector(categoryChoice(sender:)),
                               keyEquivalent: "")
         item.representedObject = representing
         return item
@@ -81,7 +81,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
 
     fileprivate func frequencyMenuItem(title: String, representing: UpdateFrequency) -> NSMenuItem {
         let item = NSMenuItem(title: title,
-                              action: #selector(self.frequencyChoice(sender:)),
+                              action: #selector(frequencyChoice(sender:)),
                               keyEquivalent: "")
         item.representedObject = representing
         return item
@@ -100,7 +100,10 @@ final class StatusItemController: NSObject, NSMenuDelegate {
 
     @objc fileprivate func frequencyChoice(sender: NSMenuItem) {
         guard let frequency = sender.representedObject as? UpdateFrequency else { return }
-        preferences.frequency = frequency
+        if preferences.frequency != frequency {
+            preferences.frequency = frequency
+            wallpaper.update(frequency: frequency)
+        }
 
     }
 

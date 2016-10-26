@@ -21,14 +21,14 @@ struct UIConstants {
     static let update = "Update"
     static let daily = "Daily"
     static let weekly = "Weekly"
-    static let themely = "With theme"
-    static let never = "Never"
+    static let manual = "Manually"
+    static let hourly = "Hourly"
 
     static let quit = "Quit Iris"
 }
 
 enum UpdateFrequency: String {
-    case request, daily, weekly, never
+    case request, hourly, daily, weekly
 }
 
 struct Parameters {

@@ -20,9 +20,6 @@ final class UnsplashSource: ImageSource {
 
     func get(type: ImageType? = .random, withOptions params: Parameters?) -> URL? {
         let options = standardOptions(overrides: params)
-        if options.frequency == .never {
-            return nil
-        }
         let category = "category/"
         switch type! {
         case .urban:

@@ -13,7 +13,8 @@ final class WallpaperController {
 
     let source: ImageSource = UnsplashSource()
     var requestOptions = Parameters()
-
+    let prefs = Preferences()
+    var timer: Timer?
     let window: NSWindow = NSWindow(contentRect: NSRect(x: 10, y:10, width: 1280, height: 720),
                                         styleMask: [NSWindowStyleMask.titled,
                                                     NSWindowStyleMask.closable,
@@ -21,13 +22,51 @@ final class WallpaperController {
                                                     NSWindowStyleMask.miniaturizable],
                                         backing: NSBackingStoreType.buffered, defer: true)
 
+    private struct Interval {
+        static let hour = 1.0 * 60.0 * 60.0
+        static let day = hour * 24.0
+        static let week = day * 7.0
+    }
+
+
     init() {
-        requestOptions.size = largestScreenSize()
+        refreshOptions()
+        resetTimer(frequency: prefs.frequency)
     }
 
     fileprivate func refreshOptions() {
-        requestOptions.frequency = Preferences().frequency
+        requestOptions.frequency = prefs.frequency
         requestOptions.size = largestScreenSize()
+    }
+
+    fileprivate func resetTimer(frequency: UpdateFrequency) {
+        if let existing = timer {
+            existing.invalidate()
+        }
+
+        switch frequency {
+        case .request:
+            timer = nil
+        case .hourly:
+            timer = timer(interval: Interval.hour)
+        case .daily:
+            timer = timer(interval: Interval.day)
+        case .weekly:
+            timer = timer(interval: Interval.week)
+        }
+    }
+
+    fileprivate func timer(interval: TimeInterval) -> Timer {
+        return Timer.scheduledTimer(timeInterval: interval,
+                            target: self,
+                            selector: #selector(autoUpdate),
+                            userInfo: nil,
+                            repeats: true)
+    }
+
+    @objc
+    fileprivate func autoUpdate() {
+        update(theme: prefs.theme)
     }
 
     fileprivate func largestScreenSize() -> NSSize? {
@@ -41,6 +80,10 @@ final class WallpaperController {
         refreshOptions()
         guard let url = source.get(type: theme, withOptions: requestOptions) else { return }
         asyncSetWallpaper(from: url)
+    }
+
+    func update(frequency: UpdateFrequency) {
+        resetTimer(frequency: frequency)
     }
 
     //    MARK: Wallpaper changes
