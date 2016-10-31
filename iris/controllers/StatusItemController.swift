@@ -17,10 +17,14 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     var updateItem: NSMenuItem?
     var scheduledUpdate: Date?
 
-    let wallpaper = WallpaperController()
-    var preferences = Preferences()
+    let wallpaper: WallpaperController
+    var preferences: Preferences
 
     override init() {
+        preferences = Preferences()
+        wallpaper = WallpaperController(imageSource: UnsplashSource(),
+                                        autoUpdate: preferences.frequency,
+                                        imageTheme: preferences.theme)
         super.init()
 
         if let statusButton = statusItem.button {
@@ -28,7 +32,8 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         }
         setupMenu()
         statusItem.menu = menu
-        wallpaper.update(theme: preferences.theme)
+        wallpaper.update()
+        scheduledUpdate = wallpaper.next
     }
 
     fileprivate func setupMenu() {
@@ -114,14 +119,17 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     @objc fileprivate func categoryChoice(sender: NSMenuItem) {
         guard let theme = sender.representedObject as? ImageType else { return }
         preferences.theme = theme
-        wallpaper.update(theme: theme)
+        wallpaper.theme = theme
+        wallpaper.update()
     }
 
     @objc fileprivate func frequencyChoice(sender: NSMenuItem) {
         guard let frequency = sender.representedObject as? UpdateFrequency else { return }
         if preferences.frequency != frequency {
             preferences.frequency = frequency
-            scheduledUpdate =  wallpaper.update(frequency: frequency)
+            wallpaper.updateFrequency = frequency
+            scheduledUpdate = wallpaper.next
+
         }
     }
 

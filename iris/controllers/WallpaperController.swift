@@ -11,10 +11,21 @@ import Cocoa
 
 final class WallpaperController {
 
-    let source: ImageSource = UnsplashSource()
-    var requestOptions = Parameters()
-    let prefs = Preferences()
-    var timer: Timer?
+    private let source: ImageSource
+    private var requestOptions = Parameters()
+    var theme: ImageType
+    var updateFrequency: UpdateFrequency {
+        didSet {
+            schedule(every: updateFrequency)
+        }
+    }
+    private var timer: Timer?
+    var next: Date? {
+        get {
+            guard let scheduled = timer?.fireDate else { return nil }
+            return scheduled
+        }
+    }
 
 
     private struct Interval {
@@ -24,22 +35,19 @@ final class WallpaperController {
     }
 
 
-    init() {
-        refreshOptions()
-        let _ = resetTimer(frequency: prefs.frequency)
+    init(imageSource: ImageSource, autoUpdate: UpdateFrequency, imageTheme: ImageType) {
+        source = imageSource
+        theme = imageTheme
+        updateFrequency = autoUpdate
+        schedule(every: updateFrequency)
     }
 
-    fileprivate func refreshOptions() {
-        requestOptions.frequency = prefs.frequency
-        requestOptions.size = largestScreenSize()
-    }
-
-    fileprivate func resetTimer(frequency: UpdateFrequency) -> Date? {
+    private func schedule(every: UpdateFrequency) {
         if let existing = timer {
             existing.invalidate()
         }
 
-        switch frequency {
+        switch updateFrequency {
         case .request:
             timer = nil
         case .hourly:
@@ -50,13 +58,12 @@ final class WallpaperController {
             timer = timer(interval: Interval.week)
         }
 
-        return timer?.fireDate
     }
 
     fileprivate func timer(interval: TimeInterval) -> Timer {
         let recurring =  Timer.scheduledTimer(timeInterval: interval,
                             target: self,
-                            selector: #selector(autoUpdate),
+                            selector: #selector(update),
                             userInfo: nil,
                             repeats: true)
         recurring.tolerance = interval * 0.20
@@ -64,8 +71,13 @@ final class WallpaperController {
     }
 
     @objc
-    fileprivate func autoUpdate() {
-        update(theme: prefs.theme)
+    func update() {
+        requestOptions.frequency = updateFrequency
+        requestOptions.size = largestScreenSize()
+
+        guard let url = source.get(type: theme, withOptions: requestOptions) else { return }
+        asyncSetWallpaper(from: url)
+
     }
 
     fileprivate func largestScreenSize() -> NSSize? {
@@ -73,16 +85,6 @@ final class WallpaperController {
             return this.frame.height > that.frame.height
         }
         return NSScreen.screens()?.max(by: compare)?.frame.size
-    }
-
-    func update(theme: ImageType) {
-        refreshOptions()
-        guard let url = source.get(type: theme, withOptions: requestOptions) else { return }
-        asyncSetWallpaper(from: url)
-    }
-
-    func update(frequency: UpdateFrequency) -> Date? {
-        return resetTimer(frequency: frequency)
     }
 
     //    MARK: Wallpaper changes
