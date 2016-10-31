@@ -13,6 +13,10 @@ final class StatusItemController: NSObject, NSMenuDelegate {
 
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     let menu = NSMenu()
+
+    var updateItem: NSMenuItem?
+    var scheduledUpdate: Date?
+
     let wallpaper = WallpaperController()
     var preferences = Preferences()
 
@@ -28,6 +32,11 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     }
 
     fileprivate func setupMenu() {
+        updateItem = headerMenuItem(title: "Just updated")
+        if let item = updateItem {
+            menu.addItem(item)
+        }
+
         menu.addItem(headerMenuItem(title: UIConstants.themes))
         menu.addItem(categoryMenuItem(title: UIConstants.random, representing: .random))
         menu.addItem(categoryMenuItem(title: UIConstants.nature, representing: .nature))
@@ -46,6 +55,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
                                 action: #selector(self.quit),
                                 keyEquivalent: "q"))
 
+        menu.delegate = self
         for item in menu.items + submenu.items {
             item.target = self
         }
@@ -65,6 +75,15 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         }
         menuItem.state = selected ? NSOnState : NSOffState
         return true
+    }
+
+    func menuWillOpen(_ menu: NSMenu) {
+        if let update = scheduledUpdate {
+            updateItem?.title = "\(UIConstants.nextUpdate) \(Fuzzer.fuzz(until: update))"
+        } else {
+            updateItem?.title = UIConstants.noUpdate
+        }
+
     }
 
     fileprivate func headerMenuItem(title: String) -> NSMenuItem {
@@ -102,9 +121,8 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         guard let frequency = sender.representedObject as? UpdateFrequency else { return }
         if preferences.frequency != frequency {
             preferences.frequency = frequency
-            wallpaper.update(frequency: frequency)
+            scheduledUpdate =  wallpaper.update(frequency: frequency)
         }
-
     }
 
 }

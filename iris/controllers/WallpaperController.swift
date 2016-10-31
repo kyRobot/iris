@@ -26,7 +26,7 @@ final class WallpaperController {
 
     init() {
         refreshOptions()
-        resetTimer(frequency: prefs.frequency)
+        let _ = resetTimer(frequency: prefs.frequency)
     }
 
     fileprivate func refreshOptions() {
@@ -34,7 +34,7 @@ final class WallpaperController {
         requestOptions.size = largestScreenSize()
     }
 
-    fileprivate func resetTimer(frequency: UpdateFrequency) {
+    fileprivate func resetTimer(frequency: UpdateFrequency) -> Date? {
         if let existing = timer {
             existing.invalidate()
         }
@@ -49,14 +49,18 @@ final class WallpaperController {
         case .weekly:
             timer = timer(interval: Interval.week)
         }
+
+        return timer?.fireDate
     }
 
     fileprivate func timer(interval: TimeInterval) -> Timer {
-        return Timer.scheduledTimer(timeInterval: interval,
+        let recurring =  Timer.scheduledTimer(timeInterval: interval,
                             target: self,
                             selector: #selector(autoUpdate),
                             userInfo: nil,
                             repeats: true)
+        recurring.tolerance = interval * 0.20
+        return recurring
     }
 
     @objc
@@ -77,8 +81,8 @@ final class WallpaperController {
         asyncSetWallpaper(from: url)
     }
 
-    func update(frequency: UpdateFrequency) {
-        resetTimer(frequency: frequency)
+    func update(frequency: UpdateFrequency) -> Date? {
+        return resetTimer(frequency: frequency)
     }
 
     //    MARK: Wallpaper changes
@@ -103,11 +107,6 @@ final class WallpaperController {
             }
             }.resume()
     }
-
-    fileprivate func setAsWallpaper(data: Data) {
-
-    }
-
 
 
 }

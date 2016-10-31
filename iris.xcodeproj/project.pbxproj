@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		090AE6FC1DC287B8000530E6 /* Fuzzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090AE6FB1DC287B8000530E6 /* Fuzzer.swift */; };
 		095960821DA41C0600291FD8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095960811DA41C0600291FD8 /* AppDelegate.swift */; };
 		095960841DA41C0600291FD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095960831DA41C0600291FD8 /* Assets.xcassets */; };
 		095960871DA41C0600291FD8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 095960851DA41C0600291FD8 /* MainMenu.xib */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		090AE6FB1DC287B8000530E6 /* Fuzzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fuzzer.swift; sourceTree = "<group>"; };
 		0959607E1DA41C0600291FD8 /* iris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		095960811DA41C0600291FD8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		095960831DA41C0600291FD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				095960921DA57C9600291FD8 /* UnsplashSource.swift */,
 				095960941DA5868D00291FD8 /* Constants.swift */,
 				098FF4C41DB178A800D5872E /* Preferences.swift */,
+				090AE6FB1DC287B8000530E6 /* Fuzzer.swift */,
 			);
 			name = Helpers;
 			path = helpers;
@@ -196,6 +199,7 @@
 				095960951DA5868D00291FD8 /* Constants.swift in Sources */,
 				098FF4C31DB13B3B00D5872E /* StatusItemController.swift in Sources */,
 				095960931DA57C9600291FD8 /* UnsplashSource.swift in Sources */,
+				090AE6FC1DC287B8000530E6 /* Fuzzer.swift in Sources */,
 				095960821DA41C0600291FD8 /* AppDelegate.swift in Sources */,
 				098FF5261DC0A67000D5872E /* WallpaperController.swift in Sources */,
 			);

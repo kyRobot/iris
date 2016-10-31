@@ -25,6 +25,9 @@ struct UIConstants {
     static let hourly = "Hourly"
 
     static let quit = "Quit Iris"
+
+    static let nextUpdate = "Next update:"
+    static let noUpdate = "\(nextUpdate) Never"
 }
 
 enum UpdateFrequency: String {
