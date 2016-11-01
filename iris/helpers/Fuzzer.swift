@@ -11,9 +11,12 @@ import Foundation
 final class Fuzzer {
 
     private struct Time {
+        static let weeks = "weeks"
+        static let week = "week"
         static let days = "days"
         static let day = "day"
         static let today = "today"
+        static let tomorrow = "tomorrow"
 
         static let hours = "hours"
         static let hour = "hour"
@@ -40,7 +43,7 @@ final class Fuzzer {
                                                         from: Date(),
                                                         to: until)
         if let days = remaining.day, days > 0 {
-            return "\(days) \(Time.days)"
+            return fuzzy(days: days)
         }
 
         if let hours = remaining.hour, hours > 0, hours < 24 {
@@ -53,6 +56,25 @@ final class Fuzzer {
         }
 
         return "Unknown"
+    }
+
+    static func fuzzy(days: Int) -> String {
+        switch days {
+        case 15...Int.max:
+            return Time.weeks
+        case 7..<15:
+            return "\(Approximations.couple) \(Time.weeks)"
+        case 5..<7:
+            return about(value: "a", units: Time.week)
+        case 3..<5:
+            return "\(Approximations.few) \(Time.days)"
+        case 2:
+            return "\(Approximations.couple) \(Time.days)"
+        case 1:
+            return Time.tomorrow
+        default:
+             return Time.today
+        }
     }
 
     static func fuzzy(hours: Int) -> String {
