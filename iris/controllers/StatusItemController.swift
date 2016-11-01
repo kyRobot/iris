@@ -40,6 +40,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         updateItem = headerMenuItem(title: "Just updated")
         if let item = updateItem {
             menu.addItem(item)
+            menu.addItem(NSMenuItem.separator())
         }
 
         menu.addItem(headerMenuItem(title: UIConstants.themes))
