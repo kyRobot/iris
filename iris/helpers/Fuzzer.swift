@@ -112,7 +112,7 @@ final class Fuzzer {
         case 0..<5:
             return "\(Approximations.few) \(Time.minutes)"
         default:
-            return "less than a \(Time.minutes)"
+            return "less than a \(Time.minute)"
         }
 
     }
